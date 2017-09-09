@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Product;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class ProductsController extends Controller
 {
@@ -27,6 +28,7 @@ class ProductsController extends Controller
     public function store(Request $request)
     {
         $product = new Product;
+        $product->user_id = Auth::user()->id;
         $product->name = $request->name;
         $product->description = $request->description;
         $product->price = $request->price;
