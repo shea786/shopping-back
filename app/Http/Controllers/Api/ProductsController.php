@@ -16,7 +16,7 @@ class ProductsController extends Controller
      */
     public function index()
     {
-        return Product::orderBy('created_at', 'desc')->get();
+        return response()->json(Product::orderBy('created_at', 'desc')->get());
     }
 
     /**
@@ -34,7 +34,7 @@ class ProductsController extends Controller
         $product->price = $request->price;
         $product->save();
 
-        return Product::find($product->id);
+        return response()->json(Product::find($product->id));
     }
 
     /**
@@ -45,7 +45,12 @@ class ProductsController extends Controller
      */
     public function show($id)
     {
-        //
+        $product = Product::find($id);
+        if(count($product) > 0) {
+            return response()->json($product);
+        } else {
+            return response()->json(['error' => 'The product cannot be found'], 404);
+        }
     }
 
     /**
@@ -57,7 +62,13 @@ class ProductsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $product = Product::find($id);
+        $product->name = $request->name;
+        $product->description = $request->description;
+        $product->price = $request->price;
+        $product->save();
+
+        return response()->json(Product::find($product->id));
     }
 
     /**
@@ -68,6 +79,12 @@ class ProductsController extends Controller
      */
     public function destroy($id)
     {
-        //
+        try {
+            Product::destroy($id);
+
+            return response([], 204);
+        } catch (\Exception $e) {
+            return response(['There was a problem while deleting the product'], 500);
+        }
     }
 }
