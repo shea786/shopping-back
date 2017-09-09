@@ -15,7 +15,7 @@ class ProductsController extends Controller
      */
     public function index()
     {
-        return Product::all();
+        return Product::orderBy('created_at', 'desc')->get();
     }
 
     /**
@@ -26,7 +26,13 @@ class ProductsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $product = new Product;
+        $product->name = $request->name;
+        $product->description = $request->description;
+        $product->price = $request->price;
+        $product->save();
+
+        return Product::find($product->id);
     }
 
     /**
