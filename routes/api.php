@@ -14,3 +14,11 @@ Route::get('/test', function () {
        ]
     ]);
 });
+
+Route::group(['middleware' => 'auth:api'], function () {
+    Route::namespace('Api')->group(function () {
+        Route::prefix('products')->group(function () {
+            Route::get('/', 'productsController@index');
+        });
+    });
+});
